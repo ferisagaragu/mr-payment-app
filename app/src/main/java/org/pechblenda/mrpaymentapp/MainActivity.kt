@@ -1,81 +1,89 @@
 package org.pechblenda.mrpaymentapp
 
 import android.os.Bundle
-import android.os.StrictMode
-import android.os.StrictMode.ThreadPolicy
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.gson.Gson
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.pechblenda.mrpaymentapp.adapter.HttpConnector
-import org.pechblenda.mrpaymentapp.adapter.ListViewAdapter
-import org.pechblenda.mrpaymentapp.entity.Period
-import org.pechblenda.mrpaymentapp.entity.RestResponse
-import org.pechblenda.mrpaymentapp.service.PeriodService
-import retrofit2.Call
-import retrofit2.Retrofit
-import kotlin.coroutines.CoroutineContext
 
+import org.pechblenda.mrpaymentapp.adapter.PeriodListViewAdapter
+import org.pechblenda.mrpaymentapp.entity.RestResponse
+import org.pechblenda.mrpaymentapp.network.RetrofitConnector
+import org.pechblenda.mrpaymentapp.service.PeriodService
+
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
 
 class MainActivity : AppCompatActivity() {
 
-	private val token = "eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6W10sInN1YiI6ImZlcm5ueXBheTk1IiwiaWF0IjoxNjUzMjY1MzgwLCJleHAiOjE2NTMyODMzODB9.5Jh0AV_jLezqsMiVXtQzPbpkGL9hhJGhYT4B01UgZOShLMIViDshz_v1V__qdIs87MQPPwlUV0yy4gVE0a279w"
+	private lateinit var recyclerView: RecyclerView
+	private lateinit var progressBar: ProgressBar
+	private lateinit var retryButton: Button
 
 	private lateinit var retrofit: Retrofit
-	private lateinit var executor: ExecutorService
-	private lateinit var recyclerView: RecyclerView
-	private lateinit var call: Call<RestResponse>
+	private lateinit var periodService: PeriodService
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		//REMOVE THIS AND USE REAL PERMISSIONS
-		//val policy = ThreadPolicy.Builder().permitAll().build()
-		//StrictMode.setThreadPolicy(policy)
-		//===================================
-
-		retrofit = HttpConnector().initRetrofit()
-		executor = Executors.newSingleThreadExecutor()
 		recyclerView = findViewById(R.id.listItem)
-		val linearLayoutManager = LinearLayoutManager(this)
-		linearLayoutManager.orientation = LinearLayoutManager.VERTICAL
-		recyclerView.layoutManager = linearLayoutManager
-		var listViewAdapter = ListViewAdapter(listOf())
-		recyclerView.adapter = listViewAdapter
+		progressBar = findViewById(R.id.progressBar)
+		retryButton = findViewById(R.id.retryButton)
 
-		val periodService: PeriodService = retrofit.create(PeriodService::class.java)
-		call = periodService.listRepos(token)
+		recyclerView.layoutManager = LinearLayoutManager(this)
+		recyclerView.adapter = PeriodListViewAdapter(listOf(), this)
 
-		GlobalScope.launch {
-			val adapter = ListViewAdapter(doNetworkCall())
+		retrofit = RetrofitConnector.initRetrofit()
+		periodService = retrofit.create(PeriodService::class.java)
 
-			runOnUiThread {
-				findViewById<ProgressBar>(R.id.progressBar).visibility = View.INVISIBLE
-				recyclerView.adapter = adapter
-			}
+		addOnListener()
+		findAllPeriods()
+	}
+
+	private fun addOnListener() {
+		retryButton.setOnClickListener {
+			retryButton.visibility = View.GONE
+			progressBar.visibility = View.VISIBLE
+			findAllPeriods()
 		}
 	}
 
-	fun doNetworkCall(): List<Period> {
-		val response = call.execute().body()
+	private fun findAllPeriods() {
+		val context = this
 
-		val data = (response?.data as List<Any?>).map { item ->
-			val gson = Gson()
-			val json = gson.toJson(item)
-			gson.fromJson(json, Period::class.java)
-		}
+		periodService.listRepos().enqueue(object : Callback<RestResponse> {
+			override fun onResponse(call: Call<RestResponse>, response: Response<RestResponse>) {
+				val periodListViewAdapter = PeriodListViewAdapter(
+					response.body()?.convertDataToPeriods()!!,
+					context
+				)
 
-		return data
+				runOnUiThread {
+					progressBar.visibility = View.GONE
+					recyclerView.adapter = periodListViewAdapter
+				}
+			}
+
+			override fun onFailure(call: Call<RestResponse>, t: Throwable) {
+				Toast.makeText(
+					applicationContext,
+					"Parece que los sistemas estan iniciando, " +
+						"vuelve a intentar iniciar la app mas tarde",
+					Toast.LENGTH_SHORT
+				).show()
+
+				runOnUiThread {
+					progressBar.visibility = View.GONE
+					retryButton.visibility = View.VISIBLE
+				}
+			}
+		})
 	}
 
 }

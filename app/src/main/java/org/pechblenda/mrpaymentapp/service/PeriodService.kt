@@ -1,13 +1,13 @@
 package org.pechblenda.mrpaymentapp.service
 
-import org.pechblenda.mrpaymentapp.entity.RestResponse
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Header
+
+import org.pechblenda.mrpaymentapp.entity.RestResponse
 
 interface PeriodService {
 
 	@GET("periods")
-	fun listRepos(@Header("Authorization") bearerToken: String): Call<RestResponse>
+	fun listRepos(): Call<RestResponse>
 
 }
