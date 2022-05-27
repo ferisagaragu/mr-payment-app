@@ -41,6 +41,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/raleway_regular"
                         android:textStyle="bold" />
 
                     <TextView
@@ -48,6 +49,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:fontFamily="@font/raleway_regular"
                         android:textAlignment="textEnd" />
 
                 </LinearLayout>
@@ -69,10 +71,10 @@
 
                         <ImageView
                             android:layout_width="wrap_content"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:textAlignment="textStart"
                             android:contentDescription="@string/pay_indicator_description"
+                            android:textAlignment="textStart"
                             app:srcCompat="@drawable/credit_card_check"
                             tools:ignore="ImageContrastCheck" />
                     </LinearLayout>
@@ -81,7 +83,8 @@
                         android:id="@+id/remainingDebt"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        android:layout_weight="1"
+                        android:fontFamily="@font/raleway_regular" />
 
                     <TextView
                         android:id="@+id/freeMoney"
@@ -89,7 +92,8 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="TextView"
-                        android:textAlignment="textEnd" />
+                        android:textAlignment="textEnd"
+                        android:fontFamily="@font/raleway_regular"/>
                 </LinearLayout>
 
             </LinearLayout>
