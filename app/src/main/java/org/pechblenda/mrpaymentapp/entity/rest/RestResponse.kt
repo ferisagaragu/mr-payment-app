@@ -1,5 +1,7 @@
-package org.pechblenda.mrpaymentapp.entity
+package org.pechblenda.mrpaymentapp.entity.rest
 
+import org.pechblenda.mrpaymentapp.entity.Payment
+import org.pechblenda.mrpaymentapp.entity.Period
 import org.pechblenda.mrpaymentapp.util.format.DateMonth
 import org.pechblenda.mrpaymentapp.util.transform.JSONFormat
 
@@ -26,6 +28,15 @@ class RestResponse(
 			if (data.name == DateMonth.generateMonthName()) periodDetail = data.detail
 
 			data
+		}
+	}
+
+	fun convertDataToPayment(): List<Payment> {
+		return (data as List<Any?>).map { item ->
+			JSONFormat.gsonInstance().fromJson(
+				JSONFormat.generateJSONText(item),
+				Payment::class.java
+			)
 		}
 	}
 

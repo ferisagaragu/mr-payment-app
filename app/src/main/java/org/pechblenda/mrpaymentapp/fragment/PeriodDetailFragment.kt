@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 import org.pechblenda.mrpaymentapp.R
+import org.pechblenda.mrpaymentapp.entity.PeriodDetail
 import org.pechblenda.mrpaymentapp.util.format.Currency
 import org.pechblenda.mrpaymentapp.util.transform.JSONFormat
 
@@ -33,14 +34,15 @@ class PeriodDetailFragment: Fragment() {
 
 	override fun onStart() {
 		super.onStart()
-		val data = JSONFormat.gsonInstance().fromJson<Map<String, Double>>(
+
+		val periodDetail = JSONFormat.gsonInstance().fromJson(
 			arguments?.getString("detail"),
-			Map::class.java
+			PeriodDetail::class.java
 		)
 
-		unique.text = Currency.withoutDecimalPesos.format(data["unique"])
-		monthly.text = Currency.withoutDecimalPesos.format(data["monthly"])
-		recurret.text = Currency.withoutDecimalPesos.format(data["recurrent"])
+		unique.text = Currency.withoutDecimalPesos.format(periodDetail.unique)
+		monthly.text = Currency.withoutDecimalPesos.format(periodDetail.monthly)
+		recurret.text = Currency.withoutDecimalPesos.format(periodDetail.recurret)
 	}
 
 }

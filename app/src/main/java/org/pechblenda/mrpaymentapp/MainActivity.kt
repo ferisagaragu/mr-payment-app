@@ -1,19 +1,23 @@
 package org.pechblenda.mrpaymentapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
+import org.pechblenda.mrpaymentapp.activity.PaymentActivity
 import org.pechblenda.mrpaymentapp.adapter.PeriodListViewAdapter
-import org.pechblenda.mrpaymentapp.entity.RestResponse
+import org.pechblenda.mrpaymentapp.entity.Period
+import org.pechblenda.mrpaymentapp.entity.rest.RestResponse
 import org.pechblenda.mrpaymentapp.fragment.PeriodDetailFragment
+import org.pechblenda.mrpaymentapp.interfaces.RecycleViewListener
 import org.pechblenda.mrpaymentapp.network.RetrofitConnector
 import org.pechblenda.mrpaymentapp.service.PeriodService
 import org.pechblenda.mrpaymentapp.util.transform.JSONFormat
@@ -23,10 +27,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), RecycleViewListener {
 
-	private lateinit var recyclerView: RecyclerView
-	private lateinit var progressBar: ProgressBar
+	private lateinit var periodList: RecyclerView
+	private lateinit var swipePeriodList: SwipeRefreshLayout
 	private lateinit var retryButton: Button
 
 	private lateinit var retrofit: Retrofit
@@ -37,12 +41,12 @@ class MainActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
 
-		recyclerView = findViewById(R.id.listItem)
-		progressBar = findViewById(R.id.progressBar)
+		periodList = findViewById(R.id.periodList)
+		swipePeriodList = findViewById(R.id.swipePeriodList)
 		retryButton = findViewById(R.id.retryButton)
 
-		recyclerView.layoutManager = LinearLayoutManager(this)
-		recyclerView.adapter = PeriodListViewAdapter(listOf(), this)
+		periodList.layoutManager = LinearLayoutManager(this)
+		periodList.adapter = PeriodListViewAdapter(listOf(), this)
 
 		retrofit = RetrofitConnector.initRetrofit()
 		periodService = retrofit.create(PeriodService::class.java)
@@ -51,18 +55,26 @@ class MainActivity : AppCompatActivity() {
 		findAllPeriods()
 	}
 
+	override fun onResume() {
+		super.onResume()
+		findAllPeriods()
+	}
+
 	private fun addOnListener() {
 		retryButton.setOnClickListener {
-			retryButton.visibility = View.GONE
-			progressBar.visibility = View.VISIBLE
+			findAllPeriods()
+		}
+
+		swipePeriodList.setOnRefreshListener {
 			findAllPeriods()
 		}
 	}
 
 	private fun findAllPeriods() {
 		val context = this
+		swipePeriodList.isRefreshing = true
 
-		periodService.listRepos().enqueue(object : Callback<RestResponse> {
+		periodService.findAllPeriods().enqueue(object : Callback<RestResponse> {
 			override fun onResponse(call: Call<RestResponse>, response: Response<RestResponse>) {
 				val resp = response.body()
 				val periodListViewAdapter = PeriodListViewAdapter(
@@ -73,8 +85,8 @@ class MainActivity : AppCompatActivity() {
 				periodDetail = resp.getPeriodDetail()
 
 				runOnUiThread {
-					progressBar.visibility = View.GONE
-					recyclerView.adapter = periodListViewAdapter
+					swipePeriodList.isRefreshing = false
+					periodList.adapter = periodListViewAdapter
 
 					val bundle = Bundle()
 					bundle.putString("detail", JSONFormat.generateJSONText(periodDetail))
@@ -95,11 +107,21 @@ class MainActivity : AppCompatActivity() {
 				).show()
 
 				runOnUiThread {
-					progressBar.visibility = View.GONE
 					retryButton.visibility = View.VISIBLE
+					swipePeriodList.isRefreshing = false
 				}
 			}
 		})
+	}
+
+	override fun onClick(item: Any, status: Any) {
+		val period = item as Period
+		val bundle = Bundle()
+		val intent = Intent(this, PaymentActivity::class.java)
+
+		bundle.putString("periodUuid", period.uuid.toString())
+		intent.putExtras(bundle)
+		this.startActivity(intent)
 	}
 
 }
