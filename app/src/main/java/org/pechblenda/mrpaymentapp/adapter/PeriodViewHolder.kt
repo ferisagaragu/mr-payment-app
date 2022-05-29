@@ -1,18 +1,16 @@
 package org.pechblenda.mrpaymentapp.adapter
 
-import android.content.Context
-import android.content.Intent
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
+import org.pechblenda.mrpaymentapp.MainActivity
 import org.pechblenda.mrpaymentapp.R
-import org.pechblenda.mrpaymentapp.activity.PaymentActivity
 import org.pechblenda.mrpaymentapp.entity.Period
 import org.pechblenda.mrpaymentapp.util.format.Currency
 
-class PeriodViewHolder(periodView: View) : RecyclerView.ViewHolder(periodView) {
+class PeriodViewHolder(periodView: View): RecyclerView.ViewHolder(periodView) {
 
 	private val periodElement: CardView
 	private val name: TextView
@@ -30,7 +28,7 @@ class PeriodViewHolder(periodView: View) : RecyclerView.ViewHolder(periodView) {
 		freeMoney = periodView.findViewById(R.id.freeMoney)
 	}
 
-	fun onRender(period: Period, context: Context) {
+	fun onRender(period: Period, context: MainActivity) {
 		name.text = period.name
 		individual.text = Currency.withoutDecimalPesos.format(period.individual).toString()
 		freeMoney.text = Currency.decimalPesos.format(period.freeMoney).toString()
@@ -44,9 +42,7 @@ class PeriodViewHolder(periodView: View) : RecyclerView.ViewHolder(periodView) {
 		}
 
 		periodElement.setOnClickListener {
-			val intent = Intent(context, PaymentActivity::class.java)
-			context.startActivity(intent)
+			context.onClick(period, Unit)
 		}
 	}
-
 }
