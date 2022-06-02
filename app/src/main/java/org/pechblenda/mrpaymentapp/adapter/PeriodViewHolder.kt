@@ -5,9 +5,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 
-import org.pechblenda.mrpaymentapp.MainActivity
 import org.pechblenda.mrpaymentapp.R
 import org.pechblenda.mrpaymentapp.entity.Period
+import org.pechblenda.mrpaymentapp.fragment.ListPeriodFragment
 import org.pechblenda.mrpaymentapp.util.format.Currency
 
 class PeriodViewHolder(periodView: View): RecyclerView.ViewHolder(periodView) {
@@ -28,7 +28,7 @@ class PeriodViewHolder(periodView: View): RecyclerView.ViewHolder(periodView) {
 		freeMoney = periodView.findViewById(R.id.freeMoney)
 	}
 
-	fun onRender(period: Period, context: MainActivity) {
+	fun onRender(period: Period, context: ListPeriodFragment) {
 		name.text = period.name
 		individual.text = Currency.withoutDecimalPesos.format(period.individual).toString()
 		freeMoney.text = Currency.decimalPesos.format(period.freeMoney).toString()
@@ -42,7 +42,7 @@ class PeriodViewHolder(periodView: View): RecyclerView.ViewHolder(periodView) {
 		}
 
 		periodElement.setOnClickListener {
-			context.onClick(period, Unit)
+			context.onClick(period.uuid, Unit)
 		}
 	}
 }

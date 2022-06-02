@@ -4,11 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-import org.pechblenda.mrpaymentapp.MainActivity
 import org.pechblenda.mrpaymentapp.R
 import org.pechblenda.mrpaymentapp.entity.Period
+import org.pechblenda.mrpaymentapp.fragment.ListPeriodFragment
 
-class PeriodListViewAdapter(private val periodList: List<Period>, private val context: MainActivity): RecyclerView.Adapter<PeriodViewHolder>() {
+class PeriodListViewAdapter(
+	private val periodList: List<Period>,
+	private val context: ListPeriodFragment
+): RecyclerView.Adapter<PeriodViewHolder>() {
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeriodViewHolder {
 		return PeriodViewHolder(

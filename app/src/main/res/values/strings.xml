@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Don Pagador</string>
 
+    <string name="period_not_load">No se pudieron cargar los periodos intentalo de nuevo</string>
     <string name="pay_indicator_description">pay indicator</string>
 </resources>

@@ -17,7 +17,10 @@
         <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/activity_main.xml" value="0.23876404494382023" />
         <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/activity_main2.xml" value="0.1" />
         <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/activity_payment.xml" value="0.23541666666666666" />
-        <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/fragment_blank.xml" value="0.1" />
+        <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/fragment_blank.xml" value="0.33" />
+        <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/fragment_detail_period.xml" value="0.1609375" />
+        <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/fragment_list_period.xml" value="0.3484375" />
+        <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/fragment_period_detail.xml" value="0.3625" />
         <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/payment_element.xml" value="0.3625" />
         <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/period_cart.xml" value="0.33" />
         <entry key="..\:/develop/pecheblenda/mr-payment/mr-payment-app/app/src/main/res/layout/period_detail.xml" value="0.33" />

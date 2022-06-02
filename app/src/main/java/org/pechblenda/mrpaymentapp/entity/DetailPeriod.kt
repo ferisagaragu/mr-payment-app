@@ -1,7 +1,7 @@
 package org.pechblenda.mrpaymentapp.entity
 
-class PeriodDetail(
+class DetailPeriod(
 	val unique: Double,
 	val monthly: Double,
-	val recurret: Double
+	val recurrent: Double
 )

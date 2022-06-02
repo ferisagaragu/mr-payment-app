@@ -1,5 +1,6 @@
 package org.pechblenda.mrpaymentapp.entity.rest
 
+import org.pechblenda.mrpaymentapp.entity.DetailPeriod
 import org.pechblenda.mrpaymentapp.entity.Payment
 import org.pechblenda.mrpaymentapp.entity.Period
 import org.pechblenda.mrpaymentapp.util.format.DateMonth
@@ -12,9 +13,9 @@ class RestResponse(
 	private val data: Any,
 ) {
 
-	private lateinit var periodDetail: Map<Any,Any>
+	private lateinit var periodDetail: DetailPeriod
 
-	fun getPeriodDetail(): Map<Any, Any> {
+	fun getPeriodDetail(): DetailPeriod {
 		return periodDetail
 	}
 

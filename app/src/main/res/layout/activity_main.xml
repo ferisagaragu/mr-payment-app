@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,37 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/retryButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="40dp"
-            android:text="Recargar los datos"
-            android:visibility="gone"
-            app:backgroundTint="@color/pink_500" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragment_container_view"
+                android:id="@+id/fragmentDetailPeriod"
+                android:name="org.pechblenda.mrpaymentapp.fragment.DetailPeriodFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-                android:id="@+id/swipePeriodList"
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/fragmentListPeriod"
+                android:name="org.pechblenda.mrpaymentapp.fragment.ListPeriodFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/periodList"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </LinearLayout>
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
